@@ -1,0 +1,20 @@
+name: Set publish date for GitHub Pages
+on:
+    push:
+        branches: [main]
+
+jobs:
+    set-publish:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set publish date (UTC) and create index.html
+              run: |
+                  PUBLISH="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+                  echo "Publish date: $PUBLISH"
+                  sed "s|__PUBLISH_DATE__|${PUBLISH}|g" index.template.html > index.html
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git add index.html
+                  git commit -m "ci: set publish date $PUBLISH" || echo "no changes to commit"
+                  git push origin HEAD:main || echo "push skipped"
