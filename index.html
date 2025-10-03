@@ -6,7 +6,7 @@
     <title>Redirecting…</title>
     <style>
       body {
-        font-family: system-ui, Segoe UI, Roboto, Arial;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
         padding: 2rem;
         max-width: 760px;
         margin: auto;
@@ -29,20 +29,19 @@
           id="direct"
           href="https://share.google/08MhOGKx76rJctzYf"
           target="_blank"
+          rel="noopener noreferrer"
           >click here</a
         >.
       </p>
     </div>
 
     <script>
-      // Your real destination link:
       const TARGET_URL = "https://share.google/08MhOGKx76rJctzYf";
 
-      // Placeholder replaced by GitHub Action:
+      // <-- Example publish timestamp (UTC). Replace with your own if you want:
       const publishDate = new Date("2025-10-03T23:54:00Z");
 
-      // Minimum valid days
-      const VALID_DAYS = 30;
+      const VALID_DAYS = 15;
       const expiry = new Date(
         publishDate.getTime() + VALID_DAYS * 24 * 60 * 60 * 1000
       );
@@ -50,16 +49,16 @@
       function tryRedirect() {
         const now = new Date();
         if (now <= expiry) {
-          setTimeout(() => {
-            window.location.href = TARGET_URL;
-          }, 800);
           document.getElementById(
             "info"
           ).textContent = `This link is valid until ${expiry.toUTCString()} (UTC). Redirecting now...`;
+          setTimeout(() => {
+            window.location.href = TARGET_URL;
+          }, 800);
         } else {
           document.getElementById("card").innerHTML = `
           <h1>Link expired</h1>
-          <p>This link expired on ${expiry.toUTCString()} (UTC). Contact the sender for a new one.</p>`;
+          <p>This link expired on <strong>${expiry.toUTCString()}</strong> (UTC). Contact the sender for a new link.</p>`;
         }
       }
       tryRedirect();
